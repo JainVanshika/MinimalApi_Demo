@@ -1,4 +1,4 @@
-﻿using MagicVilla_CouponAPI.Models;
+﻿/*using MagicVilla_CouponAPI.Models;
 
 namespace MagicVilla_CouponAPI.Data
 {
@@ -11,3 +11,4 @@ namespace MagicVilla_CouponAPI.Data
         };
     }
 }
+*/
