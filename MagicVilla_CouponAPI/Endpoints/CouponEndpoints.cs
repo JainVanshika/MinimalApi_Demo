@@ -6,6 +6,7 @@ using MagicVilla_CouponAPI.Repository.IRepository;
 using System.Data.SqlTypes;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MagicVilla_CouponAPI.Endpoints
 {
@@ -15,7 +16,7 @@ namespace MagicVilla_CouponAPI.Endpoints
         {
 
             app.MapGet("/api/coupon", GetAllCoupon)
-                .WithName("GetCoupons").Produces<APIResponse>(200);
+                .WithName("GetCoupons").Produces<APIResponse>(200).RequireAuthorization("AdminOnly");
 
 
             app.MapGet("/api/coupon/{id:int}", GetCoupon)
@@ -44,6 +45,7 @@ namespace MagicVilla_CouponAPI.Endpoints
             response.StatusCode = HttpStatusCode.OK;
             return Results.Ok(response);
         }
+        [Authorize]
         private async static Task<IResult> DeleteCoupon(ICouponRepository _couponRepo, int id)
         {
             APIResponse response = new()
@@ -66,6 +68,7 @@ namespace MagicVilla_CouponAPI.Endpoints
                 return Results.BadRequest(response);
             }
         }
+        [Authorize]
         private async static Task<IResult> UpdateCoupon(ICouponRepository _couponRepo, IMapper _mapper, IValidator<CouponUpdateDTO> _validation, [FromBody] CouponUpdateDTO couponUpdateDTO)
         {
             APIResponse response = new()
@@ -89,6 +92,7 @@ namespace MagicVilla_CouponAPI.Endpoints
             response.IsSuccess = true;
             return Results.Ok(response);
         }
+        [Authorize]
         private async static Task<IResult> CreateCoupon(ICouponRepository _couponRepo, IMapper _mapper, IValidator<CouponCreateDTO> _validation, [FromBody] CouponCreateDTO couponCreateDTO)
         {
             APIResponse response = new()
@@ -119,6 +123,7 @@ namespace MagicVilla_CouponAPI.Endpoints
             //return Results.CreatedAtRoute("GetCoupon", new { id = coupon.Id }, couponDTO);
             //return Results.Created($"/api/coupon/{coupon.Id}",coupon);
         }
+        
         private async static Task<IResult> GetCoupon(ICouponRepository _couponRepo, ILogger<Program> _logger, int id)
         {
             APIResponse response = new();

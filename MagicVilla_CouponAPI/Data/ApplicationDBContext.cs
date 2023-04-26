@@ -10,7 +10,7 @@ namespace MagicVilla_CouponAPI.Data
 
         }
         public DbSet<Coupon> Coupones { get; set; }
-
+        public DbSet<LocalUser> LocalUsers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Coupon>().HasData(
