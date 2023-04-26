@@ -20,7 +20,27 @@ namespace MagicVilla_CouponAPI.Endpoints
 
 
             app.MapGet("/api/coupon/{id:int}", GetCoupon)
-                .WithName("GetCoupon").Produces<APIResponse>(200);
+                .WithName("GetCoupon").Produces<APIResponse>(200)
+                .AddEndpointFilter(async (context, next) =>
+                {
+                    var id = context.GetArgument<int>(2);
+                    if(id==0)
+                    {
+                        return Results.BadRequest("Can not have 0 id");
+                    }
+                    Console.WriteLine("Before 1 filter");
+                    var result= await next(context);
+                    Console.WriteLine("after 1 filer");
+                    return result;
+                })
+                .AddEndpointFilter(async (context, next) =>
+                {
+                    
+                    Console.WriteLine("Before 2 filter");
+                    var result = await next(context);
+                    Console.WriteLine("after 2 filer");
+                    return result;
+                }); 
 
 
             app.MapPost("/api/coupon", CreateCoupon)
@@ -126,8 +146,10 @@ namespace MagicVilla_CouponAPI.Endpoints
         
         private async static Task<IResult> GetCoupon(ICouponRepository _couponRepo, ILogger<Program> _logger, int id)
         {
+
+            Console.WriteLine("exection");
             APIResponse response = new();
-            _logger.Log(LogLevel.Information, "Getting all coupons");
+            _logger.Log(LogLevel.Information, "Getting coupon");
             response.Result = await _couponRepo.GetAsync(id);
             response.IsSuccess = true;
             response.StatusCode = HttpStatusCode.OK;
